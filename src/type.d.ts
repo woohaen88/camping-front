@@ -26,6 +26,8 @@ export interface IReview {
     updated_at: string;
 }
 
+
+
 export interface ICamping {
     id: number;
     created_at: string;
@@ -48,6 +50,29 @@ export interface ICamping {
     amenities: IAmenity[];
     images: IImage[];
     reviews: IReview[];
+}
+
+// camping form
+export interface ICampingForm {
+    name: string;
+    rating: number;
+    price: number;
+    view: string;
+    visited_at: string;
+    visited_end: string;
+    manner_time_start: string;
+    manner_time_end: string;
+    content: string;
+    maximum_people: number;
+    is_ev_charge: boolean;
+    camping_kind: string;
+    location: string;
+}
+
+export interface ICampingFormSuccess extends ICamping{}
+
+export interface ICampingFormError {
+    message: string;
 }
 
 export interface ISignUpForm {

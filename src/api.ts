@@ -1,7 +1,7 @@
 import axios from "axios";
 import {QueryFunctionContext} from "@tanstack/react-query"
 import Cookie from "js-cookie"
-import { ISignInForm, ISignUpForm } from "./type";
+import { ICampingForm, ISignInForm, ISignUpForm } from "./type";
 
 
 
@@ -52,4 +52,27 @@ export const emailSignIn = async ({email, password}:ISignInForm) => {
     }).then((res)=>{
         return res.data
     })
+}
+
+export const createCampground = async (variables:ICampingForm) => {
+    return await instance.post("campgrounds/", variables, {
+        headers: {
+            "X-CSRFToken": Cookie.get("csrftoken") || "",
+        }
+    }).then((res) => {
+        return res.data
+    }).catch((error)=>{
+        return Promise.reject(error.response.data)
+    })
+}
+
+export const uploadImage = async (file: File, uploadURL: string) => {
+    const form = new FormData();
+    form.append("files", file)
+    return axios.post(uploadURL, form, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        }
+    }).then((res) => res.data)
+    
 }
