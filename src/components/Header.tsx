@@ -15,13 +15,14 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { FaSearch, FaBars } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SignUpModal from "./SignUpModal";
 import useUser from "../lib/useUser";
 import SignInModal from "./SignInModal";
 
 export default function Header() {
   const { isLoggedIn, user, userLoading } = useUser();
+  const navigate = useNavigate();
   const {
     isOpen: signupIsOpen,
     onOpen: signupOnOpen,
@@ -79,6 +80,9 @@ export default function Header() {
               ) : (
                 <>
                   <MenuItem>Sign Out</MenuItem>
+                  <MenuItem onClick={() => navigate("campgrounds/upload")}>
+                    생성
+                  </MenuItem>
                 </>
               )}
             </MenuList>

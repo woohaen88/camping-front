@@ -103,3 +103,32 @@ export interface ISignInFormSuccess {
 export interface ISignInFormError {
     detail: string;
 }
+
+// Cloudflare
+export interface OneTimeURLSuccess {
+    id: string;
+    uploadURL: string;
+}
+
+export interface uploadCloudFlareRequest {
+    file: File;
+    uploadURL: string;
+}
+
+export interface uploadCloudFlareResponseResult {
+    filename: string;
+    id: string;
+    requireSignedURLs: boolean;
+    uploaded: string;
+    variants: string[];
+}
+
+export interface uploadCloudFlareResponse {
+    result: uploadCloudFlareResponseResult
+}
+
+// Image
+export interface imageUploadDBparams {
+    id: string;
+    file: string;
+}

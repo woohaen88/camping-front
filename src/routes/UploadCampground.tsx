@@ -60,7 +60,8 @@ export default function UploadCampground() {
           status: "success",
           position: "bottom-right",
         });
-        navigate("/campgrounds/upload/image");
+
+        navigate(`/campgrounds/${data.id}/image/upload`);
       }
     },
     onError: (error) => {

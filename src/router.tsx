@@ -26,15 +26,20 @@ const router = createBrowserRouter([
                 path: "",
                 element: <UploadCampground />,
               },
-              {
-                path: "image/",
-                element: <UploadImage />,
-              },
             ],
           },
           {
             path: ":campgroundId/",
-            element: <Detail />,
+            children: [
+              {
+                path: "",
+                element: <Detail />,
+              },
+              {
+                path: "image/upload/",
+                element: <UploadImage />,
+              },
+            ],
           },
         ],
       },

@@ -1,7 +1,7 @@
 import axios from "axios";
 import {QueryFunctionContext} from "@tanstack/react-query"
 import Cookie from "js-cookie"
-import { ICampingForm, ISignInForm, ISignUpForm } from "./type";
+import { ICampingForm, ISignInForm, ISignUpForm, imageUploadDBparams, uploadCloudFlareRequest } from "./type";
 
 
 
@@ -66,13 +66,37 @@ export const createCampground = async (variables:ICampingForm) => {
     })
 }
 
-export const uploadImage = async (file: File, uploadURL: string) => {
+export const getOneTimeUrl = async () => {
+    return await instance.post("campgrounds/image/one-time-upload", null, {
+        headers: {
+            "X-CSRFToken": Cookie.get("csrftoken")
+        }
+    }).then((res)=>{
+        return res.data
+    })
+}
+
+export const uploadCloudFlare = async ({file, uploadURL}:uploadCloudFlareRequest) => {
     const form = new FormData();
-    form.append("files", file)
-    return axios.post(uploadURL, form, {
+    form.append("file", file)
+    return await axios.post(uploadURL, form, {
         headers: {
             "Content-Type": "multipart/form-data",
+            "X-CSRFToken": Cookie.get("csrftoken")
         }
-    }).then((res) => res.data)
+    }).then((res) => {
+        return res.data
+    }).catch((error)=>console.log("error: ", error))
     
 }
+
+export const imageUploadDB = async ({id, file}:imageUploadDBparams) => {
+    return await instance.post(`campgrounds/${id}/image/upload`, {id, file}, {
+        headers: {
+            "X-CSRFToken": Cookie.get("csrftoken")
+        }
+    }).then((res) => {
+        return res.data
+    })
+}
+
