@@ -1,7 +1,14 @@
 import axios from "axios";
 import {QueryFunctionContext} from "@tanstack/react-query"
 import Cookie from "js-cookie"
-import { ICampingForm, ISignInForm, ISignUpForm, imageUploadDBparams, uploadCloudFlareRequest } from "./type";
+import {
+    ICampingForm,
+    ISignInForm,
+    ISignUpForm,
+    imageUploadDBparams,
+    uploadCloudFlareRequest,
+    SearchRequest
+} from "./type";
 
 
 
@@ -66,37 +73,28 @@ export const createCampground = async (variables:ICampingForm) => {
     })
 }
 
-export const getOneTimeUrl = async () => {
-    return await instance.post("campgrounds/image/one-time-upload", null, {
-        headers: {
-            "X-CSRFToken": Cookie.get("csrftoken")
-        }
-    }).then((res)=>{
-        return res.data
-    })
-}
 
-export const uploadCloudFlare = async ({file, uploadURL}:uploadCloudFlareRequest) => {
+export interface testProps {
+    files: FileList;
+    id: string;
+}
+export const imageUploadURL = async ({files, id}: testProps) => {
     const form = new FormData();
-    form.append("file", file)
-    return await axios.post(uploadURL, form, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-            "X-CSRFToken": Cookie.get("csrftoken")
-        }
-    }).then((res) => {
-        return res.data
-    }).catch((error)=>console.log("error: ", error))
-    
-}
+    Array.from(files).forEach((file)=>{
+        form.append("file", file)
+    })
 
-export const imageUploadDB = async ({id, file}:imageUploadDBparams) => {
-    return await instance.post(`campgrounds/${id}/image/upload`, {id, file}, {
+    return await instance.post(`campgrounds/${id}/image/upload`, form, {
         headers: {
-            "X-CSRFToken": Cookie.get("csrftoken")
+            "X-CSRFToken": Cookie.get("csrftoken") || "",
+            "Content-Type": "multipart/form-data",
         }
     }).then((res) => {
         return res.data
     })
 }
 
+export const searchCampground = async ({queryKey}:QueryFunctionContext) => {
+    const [_, search] = queryKey
+    return await instance.get(`campgrounds/${search}`).then((res)=>res.data)
+}

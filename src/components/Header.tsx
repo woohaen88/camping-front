@@ -15,10 +15,14 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { FaSearch, FaBars } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import SignUpModal from "./SignUpModal";
 import useUser from "../lib/useUser";
 import SignInModal from "./SignInModal";
+import {useForm} from "react-hook-form";
+import {ICamping, SearchRequest} from "../type";
+import {useQuery} from "@tanstack/react-query";
+import {searchCampground} from "../api";
 
 export default function Header() {
   const { isLoggedIn, user, userLoading } = useUser();
@@ -35,6 +39,15 @@ export default function Header() {
     onClose: signinOnClose,
   } = useDisclosure();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  let searchP = searchParams.get("search")
+
+  const {register, handleSubmit} = useForm<SearchRequest>()
+  const {} = useQuery<ICamping[]>(["search", searchP], searchCampground);
+
+  const onSubmit = () => {
+
+  }
   return (
     <Box>
       <Stack
@@ -51,9 +64,11 @@ export default function Header() {
           </Text>
         </Link>
 
-        <InputGroup w={"sm"} colorScheme="green">
-          <Input type="text" placeholder="검색시작하기" />
-          <InputRightAddon children={<FaSearch />} />
+        <InputGroup w={"sm"} colorScheme="green" as={"form"}>
+          <Input {...register("search")} placeholder="검색시작하기"/>
+
+            <InputRightAddon as={"button"} type={"submit"} children={<FaSearch />} onSubmit={handleSubmit(onSubmit)}/>
+
         </InputGroup>
 
         <HStack>

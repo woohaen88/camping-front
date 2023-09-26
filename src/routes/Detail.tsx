@@ -14,6 +14,7 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getCampground } from "../api";
 import { ICamping } from "../type";
+import {responsiveGridHeight} from "../config";
 
 export default function Detail() {
   const { campgroundId } = useParams();
@@ -22,7 +23,7 @@ export default function Detail() {
     getCampground
   );
   return (
-    <Box px={20} py={5}>
+    <Box px={{base: 10, md: 20}} py={5}>
       <Box alignItems={"flex-start"}>
         <Text fontSize={"2xl"} as={"b"}>
           {data?.name}
@@ -47,13 +48,14 @@ export default function Detail() {
         gap={2}
         rounded={"xl"}
         overflow={"hidden"}
-        height={"60vh"}
+        height={responsiveGridHeight}
         mt={8}
       >
         {data?.images.map((image, index) => {
           return (
             <>
               <GridItem
+                  key={index}
                 rowSpan={index === 0 ? 2 : 1}
                 colSpan={index === 0 ? 2 : 1}
               >
@@ -62,7 +64,8 @@ export default function Detail() {
                   overflow={"hidden"}
                   objectFit={"cover"}
                   src={image.file}
-                  w={"100%"}
+                  w={"full"}
+                  h={"full"}
                 />
               </GridItem>
             </>

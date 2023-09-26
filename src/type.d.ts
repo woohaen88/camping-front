@@ -132,3 +132,8 @@ export interface imageUploadDBparams {
     id: string;
     file: string;
 }
+
+// Search
+export interface SearchRequest {
+    search: string;
+}
